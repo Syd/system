@@ -1,0 +1,28 @@
+#!/bin/bash
+set -eu
+
+# load restic config environment variables
+source /etc/restic-env.sh
+
+echo "begin restic backup"
+
+# if the repo does not already exist, then initialize it
+if ! restic snapshots 2>&1 >/dev/null; then
+  restic init
+fi
+
+# check the repo is okay
+restic check
+
+
+# create new backup
+restic backup \
+--one-file-system \
+--exclude-caches \
+{% for item in restic_backup_paths %}
+  '{{ item }}' {% if not loop.last %}\{% endif %}
+{% endfor %}
+
+echo  "Finished restic backup"
+
+exit 0

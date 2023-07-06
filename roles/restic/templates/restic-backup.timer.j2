@@ -1,0 +1,12 @@
+# /etc/systemd/system/restic-backup.timer
+[Unit]
+Description=Activates Backup Job
+
+[Timer]
+# see man 7 systemd.time for possible formats
+# everyday at 1:30 AM
+OnCalendar={{restic_backup_schedule}}
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

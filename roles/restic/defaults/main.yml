@@ -1,0 +1,12 @@
+---
+# defaults file for roles/syd.restic
+restic_repository: s3:s3.amazonaws.com/bucket_name
+aws_access_key_id: 2gXRZwB1v30yfrEK
+aws_secret_access_key: fIJM1pd40nzNI3Lg
+restic_repository_password: dnN5HkT4iqukDhrZzzbvxSwz.8vgm4b45jNx
+prune_day: Saturday # pruning operation is expensive, so do it only once a week on this day
+restic_backup_schedule: "*-*-* 01:30:00" # check systemd timer docs for info
+restic_failure_email: admin@example.com
+restic_backup_paths:
+  - /etc
+  - /root

@@ -1,0 +1,89 @@
+---
+# tasks file for roles/syd.restic
+
+# this all expects systemd as service manager so lets check that
+- name: syd.restic is only configured for systemd systems
+  meta: end_play
+  when: ansible_facts.service_mgr != "systemd"
+
+- name: install restic
+  package:
+    name: restic
+    state: present
+  become: yes
+  notify: reload systemd config
+
+- name: < restic.syd makes use of loading env vars via 'source' which is
+          not available in 'sh', only bash. So installing bash is (for now) a requirement
+  package:
+    name: bash
+    state: present
+
+- name: create restic cache path
+  file:
+    name: /var/cache/restic
+    state: directory
+  become: yes
+
+- name: create restic environment config file
+  template:
+    src: restic-env.sh.j2
+    dest: /etc/restic-env.sh
+    owner: root
+    group: root
+    mode: 600
+  become: yes
+  notify: reload systemd config
+
+- name: write the main backup script
+  template:
+    src: restic-backup.sh.j2
+    dest: /usr/local/sbin/restic-backup.sh
+    mode: 755
+  become: yes
+  notify: reload systemd config
+
+- name: write cleanup backups script
+  template:
+    src: cleanup-backups.sh.j2
+    dest: /usr/local/sbin/cleanup-backups.sh
+    mode: 755
+  become: yes
+  notify: reload systemd config
+
+- name: write restic prune script
+  template:
+    src: restic-prune.sh.j2
+    dest: /usr/local/sbin/restic-prune.sh
+    mode: 755
+  become: yes
+  notify: reload systemd config
+
+- name: write restic systemd timer
+  template:
+    src: restic-backup.timer.j2
+    dest: /etc/systemd/system/restic-backup.timer
+  become: yes
+  notify: reload systemd config
+
+- name: write restic systemd oneshot service
+  template:
+    src: restic-backup.service.j2
+    dest: /etc/systemd/system/restic-backup.service
+  become: yes
+  notify: reload systemd config
+
+- name: write restic systemd failure service
+  template:
+    src: restic-backup-failure.service.j2
+    dest: /etc/systemd/system/restic-backup-failure.service
+  become: yes
+  notify: reload systemd config
+
+- name: write restic failure script
+  template:
+    src: unit-failure.sh.j2
+    dest: /usr/local/sbin/unit-failure.sh
+    mode: 755
+  become: yes
+  notify: reload systemd config

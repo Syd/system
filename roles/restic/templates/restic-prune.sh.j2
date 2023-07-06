@@ -1,0 +1,27 @@
+#!/bin/bash
+
+set -eu
+
+# get config through environment variables
+source '/etc/restic-env.sh'
+
+echo "Started pruning"
+
+# check repository is ok
+restic check
+
+# expire old snapshots once a week
+# keep one snapshot per month for the last 12 month
+# keep all snaphots within the last 30 days
+# also removes unreferenced data from repo
+if [ $(date +%A) == "{{ prune_day }}" ]; then
+	restic forget \
+	       --keep-monthly 12 \
+	       --keep-within 30d \
+	       --prune
+    echo "Finished pruning"
+else
+    echo "Skipping pruning"
+fi
+
+exit 0

@@ -1,0 +1,27 @@
+# /etc/systemd/system/restic-backup.service
+[Unit]
+Description=Run backup job
+Documentation=man:restic(1)
+Documentation=https://restic.readthedocs.io/en/stable/
+Requires=local-fs.target
+Requires=network.target
+OnFailure=restic-backup-failure.service
+
+[Service]
+Type=oneshot
+Environment="RESTIC_CACHE_DIR=/var/cache/restic"
+ExecStartPre=/usr/local/sbin/cleanup-backups.sh
+ExecStart=/usr/local/sbin/restic-backup.sh
+ExecStartPost=/usr/local/sbin/restic-prune.sh
+
+# Security hardening (see man 7 systemd.exec)
+PrivateTmp=true
+ProtectHome=read-only
+ProtectSystem=full
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+ProtectControlGroups=true
+PrivateDevices=true
+MemoryDenyWriteExecute=true
+ReadWritePaths=/var/backups /var/cache/restic

@@ -1,0 +1,20 @@
+# /etc/systemd/system/restic-backup-failure.service
+[Unit]
+Description=Report backup failures
+Requires=network.target
+
+[Service]
+Type=oneshot
+# Email notification with logs (%n is systemd unit name)
+ExecStart=-/usr/local/sbin/unit-failure.sh "%n" "{{ restic_failure_email }}"
+
+# Security hardening (see man 7 systemd.exec)
+PrivateTmp=true
+ProtectHome=full
+ProtectSystem=full
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+ProtectControlGroups=true
+PrivateDevices=true
+MemoryDenyWriteExecute=true
