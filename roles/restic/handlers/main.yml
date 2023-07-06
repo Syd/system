@@ -1,5 +1,5 @@
 ---
-# handlers file for roles/syd.restic
+# handlers file for roles/syd.system.restic
 - name: reload systemd config
   systemd:
     daemon_reload: yes

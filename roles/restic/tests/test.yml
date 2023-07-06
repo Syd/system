@@ -2,4 +2,4 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - roles/syd.restic
+    - roles/syd.system.restic

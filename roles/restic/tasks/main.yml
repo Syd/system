@@ -1,8 +1,8 @@
 ---
-# tasks file for roles/syd.restic
+# tasks file for roles/syd.system.restic
 
 # this all expects systemd as service manager so lets check that
-- name: syd.restic is only configured for systemd systems
+- name: syd.system.restic is only configured for systemd systems
   meta: end_play
   when: ansible_facts.service_mgr != "systemd"
 
@@ -13,7 +13,7 @@
   become: yes
   notify: reload systemd config
 
-- name: < restic.syd makes use of loading env vars via 'source' which is
+- name: < syd.system.restic makes use of loading env vars via 'source' which is
           not available in 'sh', only bash. So installing bash is (for now) a requirement
   package:
     name: bash

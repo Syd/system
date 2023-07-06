@@ -1,4 +1,4 @@
-syd.restic
+syd.system.restic
 =========
 
 creates a scheduled backup system using [restic](https://restic.readthedocs.io)
@@ -32,7 +32,7 @@ Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
-    - name: include syd.restic
+    - name: include syd.system.restic
       tags: ['always']
       vars:
         restic_repository: s3:s3.us-west-000.backblazeb2.com/repo
@@ -46,7 +46,7 @@ Including an example of how to use your role (for instance, with variables passe
           - /etc/
           - /var/lib/docker/volumes
       include_role:
-        name: syd.restic
+        name: syd.system.restic
 
 License
 -------

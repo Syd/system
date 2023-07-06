@@ -1,5 +1,5 @@
 ---
-# defaults file for roles/syd.restic
+# defaults file for roles/syd.system.restic
 restic_repository: s3:s3.amazonaws.com/bucket_name
 aws_access_key_id: 2gXRZwB1v30yfrEK
 aws_secret_access_key: fIJM1pd40nzNI3Lg
