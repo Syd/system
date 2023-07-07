@@ -14,7 +14,7 @@ restic check
 # keep one snapshot per month for the last 12 month
 # keep all snaphots within the last 30 days
 # also removes unreferenced data from repo
-if [ $(date +%A) == "{{ prune_day }}" ]; then
+if [ $(date +%A) == "{{ restic_prune_day }}" ]; then
 	restic forget \
 	       --keep-monthly 12 \
 	       --keep-within 30d \
